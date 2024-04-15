@@ -1,0 +1,19 @@
+body {
+    font-family: Arial, sans-serif; /* Adds a modern sans-serif font to the whole page */
+    background-color: #f0f8ff; /* Light blue background */
+    color: #333333; /* Dark grey text color for better readability */
+    margin: 20px; /* Adds space around the content */
+}
+h1, h2 {
+    color: #2a52be; /* Cerulean blue for headings */
+}
+a {
+    color: #008b8b; /* Dark cyan color for links */
+    text-decoration: none; /* Removes underline from links */
+}
+a:hover {
+    text-decoration: underline; /* Adds underline on hover for better user experience */
+}
+li {
+    margin-bottom: 5px; /* Adds a little space below each list item */
+}
