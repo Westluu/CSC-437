@@ -1,19 +1,48 @@
 body {
-    font-family: Arial, sans-serif; /* Adds a modern sans-serif font to the whole page */
-    background-color: #f0f8ff; /* Light blue background */
-    color: #333333; /* Dark grey text color for better readability */
-    margin: 20px; /* Adds space around the content */
+  font-family: Arial, sans-serif;
+  background-color: #f0f8ff;
+  color: black;
+  margin: 20px;
 }
-h1, h2 {
-    color: #2a52be; /* Cerulean blue for headings */
+
+h1,
+h2 {
+  color: blue;
 }
+
 a {
-    color: #008b8b; /* Dark cyan color for links */
-    text-decoration: none; /* Removes underline from links */
+  color: lightseagreen;
+  text-decoration: none;
 }
+
 a:hover {
-    text-decoration: underline; /* Adds underline on hover for better user experience */
+  text-decoration: underline;
 }
+
 li {
-    margin-bottom: 5px; /* Adds a little space below each list item */
+  margin-bottom: 5px;
 }
+
+#posts {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+#posts h3 {
+  font-size: 24px;
+  margin-top: 0;
+}
+
+#posts img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+#posts .date {
+  font-size: 14px;
+  color: gray;
+  margin-bottom: 10px;
