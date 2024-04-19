@@ -21,8 +21,12 @@
       </article>
     </section>
 
+    <drop-down>
+
+    </drop-down>
+
     <section id="locations"> 
-      <h2>Click to View Locations</h2>
+      <h2 onclick="loadLinks()">Click to View More Locations</h2>
       <ul>
         <li><a href="./american_river.html">American River</a></li>
         <li><a href="./grand_lake.html">Grand Lake</a></li>
@@ -31,15 +35,20 @@
       </ul>
     </section>
 
+    <script>
+    function loadLinks() {
+      document.getElementById("demo").style.color = "red";
+    }
+    </script>
     <section id="fishes">
-      <h2>Click to View Fishes</h2>
+      <h2>Click to View More Fishes</h2>
       <ul>
         <li><a href="./american_river.html">Bass</a></li>
       </ul>
     </section>
 
     <section id="baits">
-      <h2>Click to View Baits</h2>
+      <h2>Click to View More Baits</h2>
       <ul>
         <li><a href="./grand_lake.html">Minnows</a></li>
       </ul>
