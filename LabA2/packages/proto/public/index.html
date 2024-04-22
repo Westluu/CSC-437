@@ -1,32 +1,39 @@
 <!DOCTYPE html>
 <head>
+  <meta charset="UTF-8">
+  <title>Dark Mode Switch</title>
   <link rel="stylesheet" href="/styles/page.css">
-  <title>Fishing for Fishermen</title>
+  <link rel="stylesheet" href="/styles/tokens.css">
 </head>
 <body>
   <header> 
     <h1>Fishing 𓆝</h1>
+    <label id="dark-mode-switch">
+      <input type="checkbox" id="darkModeCheckbox" autocomplete="off">
+      Dark mode
+    </label>
   </header>
 
   <main> 
     <section id="posts">
       <h2>Recent Catches</h2>
+
       <article>
-        <h3>John's Memorable Catch at Grand Lake</h3>
-        <!-- <img src="images " alt="John holding a large bass at Grand Lake" width="300"> -->
-        <p class="date">April 14, 2024</p>
-        <p><strong>Location:</strong> <a href="./grand_lake.html">Grand Lake</a></p>
-        <p><strong>Bait Used:</strong> Minnows</p>
-        <p>Place Text</p>
+        <h3> John's Memorable Catch at Grand Lake</h3>
+        <details>
+            <img src="./images/bob.jpeg " alt="John holding a large bass at Grand Lake" width="300">
+            <p class="date">April 14, 2024</p>
+            <p><strong>Location:</strong> <a href="./grand_lake.html">Grand Lake</a></p>
+            <p><strong>Bait Used:</strong> Minnows</p>
+            <p>Place Text</p>
+        </details>
       </article>
+
+
     </section>
 
-    <drop-down>
-
-    </drop-down>
-
     <section id="locations"> 
-      <h2 onclick="loadLinks()">Click to View More Locations</h2>
+      <h2 onclick="loadContent('./lakes/more_lake.html', 'locations')">Click to View More Locations</h2>
       <ul>
         <li><a href="./american_river.html">American River</a></li>
         <li><a href="./grand_lake.html">Grand Lake</a></li>
@@ -35,24 +42,28 @@
       </ul>
     </section>
 
-    <script>
-    function loadLinks() {
-      document.getElementById("demo").style.color = "red";
-    }
-    </script>
     <section id="fishes">
-      <h2>Click to View More Fishes</h2>
+      <h2 onclick="loadContent('./more_fishes.html', 'fishes')">Click to View More Fishes</h2>
       <ul>
         <li><a href="./american_river.html">Bass</a></li>
       </ul>
     </section>
 
     <section id="baits">
-      <h2>Click to View More Baits</h2>
+      <h2 onclick="loadContent('./more_baits.html', 'baits')">Click to View More Baits</h2>
       <ul>
         <li><a href="./grand_lake.html">Minnows</a></li>
       </ul>
     </section>
   </main>
+  <script>
+    function toggleDarkMode() {
+      const body = document.body;
+      body.classList.toggle("dark-mode");
+      console.log("Dark mode toggled:", body.classList.contains("dark-mode"));
+    }
+
+    document.getElementById("darkModeCheckbox").addEventListener("change", toggleDarkMode);
+  </script>
 </body>
 </html>

@@ -1,0 +1,17 @@
+:root {
+  --color-primary: rgb(93, 193, 227);
+  --color-secondary: seagreen;
+  --color-background: white;
+
+  --size-font-body: 16px;
+  --size-font-heading: 24px;
+
+  --spacing-small: 5px;
+  --spacing-medium: 10px;
+  --spacing-large: 20px;
+
+  .dark-mode {
+    --color-background: black;
+    --color-text: white;
+  }
+}
