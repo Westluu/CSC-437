@@ -1,69 +1,128 @@
 <!DOCTYPE html>
-<head>
-  <meta charset="UTF-8">
-  <title>Dark Mode Switch</title>
-  <link rel="stylesheet" href="/styles/page.css">
-  <link rel="stylesheet" href="/styles/tokens.css">
-</head>
-<body>
-  <header> 
-    <h1>Fishing 𓆝</h1>
-    <label id="dark-mode-switch">
-      <input type="checkbox" id="darkModeCheckbox" autocomplete="off">
-      Dark mode
-    </label>
-  </header>
+<html lang="en">
 
-  <main> 
-    <section id="posts">
-      <h2>Recent Catches</h2>
-
-      <article>
-        <h3> John's Memorable Catch at Grand Lake</h3>
-        <details>
-            <img src="./images/bob.jpeg " alt="John holding a large bass at Grand Lake" width="300">
-            <p class="date">April 14, 2024</p>
-            <p><strong>Location:</strong> <a href="./grand_lake.html">Grand Lake</a></p>
-            <p><strong>Bait Used:</strong> Minnows</p>
-            <p>Place Text</p>
-        </details>
-      </article>
-
-
-    </section>
-
-    <section id="locations"> 
-      <h2 onclick="loadContent('./lakes/more_lake.html', 'locations')">Click to View More Locations</h2>
-      <ul>
-        <li><a href="./american_river.html">American River</a></li>
-        <li><a href="./grand_lake.html">Grand Lake</a></li>
-        <li><a href="./lake_fork.html">Lake Fork</a></li>
-        <li><a href="./clear_lake.html">Clear Lake</a></li>
-      </ul>
-    </section>
-
-    <section id="fishes">
-      <h2 onclick="loadContent('./more_fishes.html', 'fishes')">Click to View More Fishes</h2>
-      <ul>
-        <li><a href="./american_river.html">Bass</a></li>
-      </ul>
-    </section>
-
-    <section id="baits">
-      <h2 onclick="loadContent('./more_baits.html', 'baits')">Click to View More Baits</h2>
-      <ul>
-        <li><a href="./grand_lake.html">Minnows</a></li>
-      </ul>
-    </section>
-  </main>
+  <head>
+    <title>Dark Mode Switch</title>
+    <!-- <link rel="stylesheet" href="/styles/reset.css" /> -->
+    <link rel="stylesheet" href="/styles/page.css" />
+    <link rel="stylesheet" href="/styles/tokens.css" />
+  </head>
   <script>
-    function toggleDarkMode() {
-      const body = document.body;
-      body.classList.toggle("dark-mode");
-      console.log("Dark mode toggled:", body.classList.contains("dark-mode"));
+    const parser = new DOMParser();
+
+    function addFragment(htmlString, container) {
+      const doc = parser.parseFromString(htmlString, "text/html");
+      const fragment = Array.from(doc.body.childNodes);
+      container.append(...fragment);
     }
 
-    document.getElementById("darkModeCheckbox").addEventListener("change", toggleDarkMode);
+    function addFragmentFrom(url, container) {
+      fetch(url)
+        .then((res) => res.text())
+        .then((text) => addFragment(text, container));
+    }
   </script>
-</body>
+  <body>
+    <header>
+      <h1>Fishing 𓆝</h1>
+      <label id="dark-mode-switch">
+        <input type="checkbox" id="darkModeCheckbox" autocomplete="off" />
+        Dark mode
+      </label>
+    </header>
+
+    <main>
+      <section id="posts">
+        <h2>Recent Catches</h2>
+
+        <article>
+          <h3>John's Memorable Catch at Grand Lake</h3>
+          <details>
+            <summary>Click to View More</summary>
+            <img
+              src="./images/bob.jpg "
+              alt="John holding a large bass at Grand Lake"
+              width="300"
+            />
+            <p class="date">April 14, 2024</p>
+            <p>
+              <strong>Location:</strong>
+              <a href="./grand_lake.html">Grand Lake</a>
+            </p>
+            <p><strong>Bait Used:</strong> Minnows</p>
+            <p>Place Text</p>
+          </details>
+        </article>
+      </section>
+
+      <section id="locations">
+        <h2>
+          Lakes
+        </h2>
+        <ul>
+          <li>
+            <a
+              onclick="addFragmentFrom('./lakes/american_river.html', event.target.closest('li'))"
+            >
+              American River
+            </a>
+          </li>
+          <li>
+            <a
+              onclick="addFragmentFrom('./lakes/grand_lake.html', event.target.closest('li'))"
+            >
+              Grand Lake
+            </a>
+          </li>
+          <li>
+            <a
+              onclick="addFragmentFrom('./lakes/lake_fork.html', event.target.closest('li'))"
+            >
+              Lake Fork
+            </a>
+          </li>
+          <li>
+            <a
+              onclick="addFragmentFrom('./lakes/clear_lake.html', event.target.closest('li'))"
+            >
+              Clear Lake
+            </a>
+          </li>
+          <!-- <li><a href="./lakes/grand_lake.html">Grand Lake</a></li>
+          <li><a href="./lakes/lake_fork.html">Lake Fork</a></li>
+          <li><a href="./lakes/clear_lake.html">Clear Lake</a></li> -->
+        </ul>
+      </section>
+
+      <section id="fishes">
+        <h2>
+          Fishes
+        </h2>
+        <ul>
+          <li><a href="./american_river.html">Bass</a></li>
+        </ul>
+      </section>
+
+      <section id="baits">
+        <h2>
+          Baits
+        </h2>
+        <ul>
+          <li><a href="./grand_lake.html">Minnows</a></li>
+        </ul>
+      </section>
+    </main>
+
+    <script>
+      function toggleDarkMode() {
+        const body = document.body;
+        body.classList.toggle("dark-mode");
+        console.log("Dark mode toggled:", body.classList.contains("dark-mode"));
+      }
+
+      document
+        .getElementById("darkModeCheckbox")
+        .addEventListener("change", toggleDarkMode);
+    </script>
+  </body>
 </html>
