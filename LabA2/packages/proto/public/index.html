@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-
   <head>
     <title>Dark Mode Switch</title>
-    <!-- <link rel="stylesheet" href="/styles/reset.css" /> -->
+    <link rel="stylesheet" href="/styles/reset.css" />
     <link rel="stylesheet" href="/styles/page.css" />
     <link rel="stylesheet" href="/styles/tokens.css" />
   </head>
@@ -22,13 +21,16 @@
         .then((text) => addFragment(text, container));
     }
   </script>
+  <script type="module" src="./js/drop_down.js"></script>
   <body>
     <header>
       <h1>Fishing 𓆝</h1>
-      <label id="dark-mode-switch">
-        <input type="checkbox" id="darkModeCheckbox" autocomplete="off" />
-        Dark mode
-      </label>
+      <drop-down>
+        <label id="dark-mode-switch">
+          <input type="checkbox" id="darkModeCheckbox" autocomplete="off" />
+          Dark mode
+        </label>
+      </drop-down>
     </header>
 
     <main>
@@ -56,9 +58,7 @@
       </section>
 
       <section id="locations">
-        <h2>
-          Lakes
-        </h2>
+        <h2>Lakes</h2>
         <ul>
           <li>
             <a
@@ -88,27 +88,28 @@
               Clear Lake
             </a>
           </li>
-          <!-- <li><a href="./lakes/grand_lake.html">Grand Lake</a></li>
-          <li><a href="./lakes/lake_fork.html">Lake Fork</a></li>
-          <li><a href="./lakes/clear_lake.html">Clear Lake</a></li> -->
         </ul>
       </section>
 
       <section id="fishes">
-        <h2>
-          Fishes
-        </h2>
+        <h2>Fishes</h2>
         <ul>
-          <li><a href="./american_river.html">Bass</a></li>
+          <a
+            onclick="addFragmentFrom('./fishes/bass.html', event.target.closest('ul'))"
+          >
+            Bass
+          </a>
         </ul>
       </section>
 
       <section id="baits">
-        <h2>
-          Baits
-        </h2>
+        <h2>Baits</h2>
         <ul>
-          <li><a href="./grand_lake.html">Minnows</a></li>
+          <a
+            onclick="addFragmentFrom('./baits/minnow.html', event.target.closest('ul'))"
+          >
+            Minnows
+          </a>
         </ul>
       </section>
     </main>

@@ -15,37 +15,23 @@ header {
   color: var(--color-secondary);
 }
 
-nav ul {
-  list-style: none;
-  display: flex;
-  padding: 0;
-  margin: 0;
-}
-
-nav ul li {
-  margin-right: var(--spacing-medium);
-}
-
-nav ul li:last-child {
-  margin-right: 0;
-}
-
-nav a {
-  text-decoration: none;
-  color: inherit;
-}
-
-nav a:hover {
-  text-decoration: underline;
-}
-
 main {
   padding: var(--spacing-medium);
 }
 
+section {
+  margin-left: 30px;
+  margin-bottom: 20px;
+}
+
+section ul {
+  margin-left: 30px;
+}
+
 #posts {
   background-color: white;
-  padding: var(--spacing-medium);
+  padding-top: var(--spacing-medium);
+  padding-bottom: var(--spacing-medium);
   border-radius: 8px;
   margin-bottom: var(--spacing-large);
   width: 50%;
@@ -64,9 +50,10 @@ main {
   margin-bottom: var(--spacing-medium);
   border-radius: 8px;
 }
+
 #posts article {
-  background-color: #f9f9f9;
-  border: 1px solid #e0e0e0;
+  background-color: white;
+  border: 1px solid white;
   border-radius: 10px;
   padding: 16px;
   margin-bottom: 16px;
