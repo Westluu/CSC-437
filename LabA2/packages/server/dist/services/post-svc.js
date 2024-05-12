@@ -18,10 +18,24 @@ var __copyProps = (to, from, except, desc) => {
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 var post_svc_exports = {};
 __export(post_svc_exports, {
-  default: () => post_svc_default,
-  get: () => get
+  default: () => post_svc_default
 });
 module.exports = __toCommonJS(post_svc_exports);
+var import_mongoose = require("mongoose");
+const PostSchema = new import_mongoose.Schema(
+  {
+    id: { type: String, required: true, trim: true },
+    title: { type: String, required: true, trim: true },
+    image: { type: String, trim: true },
+    location: { type: String, trim: true },
+    date: { type: Date },
+    fish: { type: String },
+    bait: { type: String },
+    description: { type: String }
+  },
+  { collection: "user_posts" }
+);
+const PostModel = (0, import_mongoose.model)("Post", PostSchema);
 let posts = [
   {
     id: "john",
@@ -64,11 +78,16 @@ let posts = [
     description: "The carp were biting at Sunny Beach today. Got some real big ones!"
   }
 ];
-function get(id) {
-  return posts.find((t) => t.id === id);
+function index() {
+  return PostModel.find();
 }
-var post_svc_default = { get };
-// Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
-  get
-});
+function get(userid) {
+  return PostModel.find({ userid }).then((list) => list[0]).catch((err) => {
+    throw `${userid} Not Found`;
+  });
+}
+function create(post) {
+  const p = new PostModel(post);
+  return p.save();
+}
+var post_svc_default = { index, get, create };

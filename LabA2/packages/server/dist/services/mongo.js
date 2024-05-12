@@ -26,24 +26,33 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-var posts_exports = {};
-__export(posts_exports, {
-  default: () => posts_default
+var mongo_exports = {};
+__export(mongo_exports, {
+  connect: () => connect
 });
-module.exports = __toCommonJS(posts_exports);
-var import_express = __toESM(require("express"));
-var import_post_svc = __toESM(require("../services/post-svc"));
-const router = import_express.default.Router();
-router.get("/", (req, res) => {
-  import_post_svc.default.index().then((list) => res.json(list)).catch((err) => res.status(500).send(err));
+module.exports = __toCommonJS(mongo_exports);
+var import_mongoose = __toESM(require("mongoose"));
+var import_dotenv = __toESM(require("dotenv"));
+import_mongoose.default.set("debug", true);
+import_dotenv.default.config();
+function getMongoURI(dbname) {
+  let connection_string = `mongodb://localhost:27017/${dbname}`;
+  const { MONGO_USER, MONGO_PWD, MONGO_CLUSTER } = process.env;
+  if (MONGO_USER && MONGO_PWD && MONGO_CLUSTER) {
+    console.log(
+      "Connecting to MongoDB at",
+      `mongodb+srv://${MONGO_USER}:<password>@${MONGO_CLUSTER}/${dbname}`
+    );
+    connection_string = `mongodb+srv://${MONGO_USER}:${MONGO_PWD}@${MONGO_CLUSTER}/${dbname}?retryWrites=true&w=majority`;
+  } else {
+    console.log("Connecting to MongoDB at ", connection_string);
+  }
+  return connection_string;
+}
+function connect(dbname) {
+  import_mongoose.default.connect(getMongoURI(dbname)).catch((error) => console.log(error));
+}
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  connect
 });
-router.get("/:userid", (req, res) => {
-  const { userid } = req.params;
-  import_post_svc.default.get(userid).then((post) => res.json(post)).catch((err) => res.status(404).end(err));
-});
-router.post("/", (req, res) => {
-  console.log("here");
-  const newPost = req.body;
-  import_post_svc.default.create(newPost).then((post) => res.status(201).send(post)).catch((err) => res.status(500).send(err));
-});
-var posts_default = router;

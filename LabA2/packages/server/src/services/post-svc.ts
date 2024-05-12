@@ -1,5 +1,21 @@
-// src/services/profile-svc.ts
+import { Schema, Model, Document, model } from "mongoose";
 import { Post } from "../models/post";
+
+const PostSchema = new Schema<Post>(
+  {
+    id: { type: String, required: true, trim: true },
+    title: { type: String, required: true, trim: true },
+    image: { type: String, trim: true },
+    location: { type: String, trim: true },
+    date: {type: Date},
+    fish: {type: String},
+    bait: {type: String},
+    description: {type: String}
+  },
+  { collection: "user_posts" }
+);
+
+const PostModel = model<Post>("Post", PostSchema);
 
 // in-memory DB
 let posts: Array<Post> = [
@@ -49,8 +65,21 @@ let posts: Array<Post> = [
   },
 ];
 
-export function get(id: String): Post | undefined {
-  return posts.find((t) => t.id === id);
+function index(): Promise<Post[]> {
+  return PostModel.find();
 }
 
-export default { get };
+function get(userid: String): Promise<Post> {
+  return PostModel.find({ userid })
+    .then((list) => list[0])
+    .catch((err) => {
+      throw `${userid} Not Found`;
+    });
+}
+
+function create(post: Post): Promise<Post> {
+  const p = new PostModel(post);
+  return p.save();
+}
+
+export default { index, get, create };

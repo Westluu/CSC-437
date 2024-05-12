@@ -1,8 +1,9 @@
 // src/index.ts
 import express, { Request, Response } from "express";
 import posts from "./routes/posts";
+import { connect } from "./services/mongo";
 
-
+connect("cluster0");
 const app = express();
 
 const port = process.env.PORT || 3000;
