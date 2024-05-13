@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,200;0,400;0,700;1,700&family=Merriweather:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles/reset.css" />
+    <link rel="stylesheet" href="/styles/tokens.css" />
+    <link rel="stylesheet" href="/styles/page.css" />
+    <link rel="stylesheet" href="/styles/form.css" />
+    <script type="module" src="/js/json-loader.js"></script>
+    <script type="module" src="/js/restful-form.js"></script>
+    <script type="module">
+      import { relayEvent } from "/js/relay-event.js";
+      window.relayEvent = relayEvent;
+    </script>
+  </head>
+  <body>
+    <restful-form slot="form" src="http://localhost:3000/api/posts/john">
+      <label>
+        <span>Title</span>
+        <input name="title" value="John's Memorable Catch at Grand Lake" />
+      </label>
+      <label>
+        <span>Image URL</span>
+        <input name="imageUrl" value="./images/bob.jpg" />
+      </label>
+      <label>
+        <span>Date</span>
+        <input
+          type="datetime-local"
+          name="date"
+          value="2024-05-11T23:29:00.000+00:00"
+        />
+      </label>
+      <label>
+        <span>Location</span>
+        <input name="location" value="Grand Lake" />
+      </label>
+      <label>
+        <span>Fish Caught</span>
+        <input name="fish" value="Bass" />
+      </label>
+      <label>
+        <span>Bait Used</span>
+        <input name="bait" value="Minnows" />
+      </label>
+      <label>
+        <span>Description</span>
+        <textarea name="description">
+What an amazing spot here at Grand Lake, caught so many bass here!</textarea
+        >
+      </label>
+      <button slot="delete" onclick="relayEvent(event,'restful-form:delete')">
+        Delete this Post
+      </button>
+    </restful-form>
+
+    <json-object src="http://localhost:3000/api/posts/bob">
+      <a href="#" onclick="relayEvent(event, 'json-object:open')"> Posts </a>
+    </json-object>
+  </body>
+</html>
