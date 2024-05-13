@@ -14,7 +14,7 @@ const articleHTML = `
 `;
 
 export class MemorableCatchElement extends HTMLElement {
-    static template = prepareTemplate(articleHTML); // Prepare and store the template
+    static template = prepareTemplate(articleHTML); 
 
     constructor() {
         super();

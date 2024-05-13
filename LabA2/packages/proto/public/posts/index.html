@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="/styles/tokens.css" />
     <link rel="stylesheet" href="/styles/page.css" />
     <link rel="stylesheet" href="/styles/form.css" />
+    <script type="module" src="/js/post-view.js"></script>
     <script type="module" src="/js/json-loader.js"></script>
     <script type="module" src="/js/restful-form.js"></script>
     <script type="module">
@@ -20,6 +21,8 @@
     </script>
   </head>
   <body>
+    <post-view src="http://localhost:3000/api/posts/john"></post-view>
+
     <restful-form slot="form" src="http://localhost:3000/api/posts/john">
       <label>
         <span>Title</span>
@@ -27,7 +30,7 @@
       </label>
       <label>
         <span>Image URL</span>
-        <input name="imageUrl" value="./images/bob.jpg" />
+        <input name="image" value="./images/bob.jpg" />
       </label>
       <label>
         <span>Date</span>
