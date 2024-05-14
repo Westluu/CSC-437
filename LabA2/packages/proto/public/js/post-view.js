@@ -1,4 +1,5 @@
 import { prepareTemplate } from "./template.js";
+import { Auth, Observer } from "@calpoly/mustang";
 
 export class PostViewElement extends HTMLElement {
     static styles = `
@@ -51,19 +52,35 @@ export class PostViewElement extends HTMLElement {
     get src() {
       return this.getAttribute("src");
     }
-  
+    _authObserver = new Observer(this, "cluster0:auth");
+
+    get authorization() {
+      console.log("Authorization for user, ", this._user);
+      return (
+        this._user?.authenticated && {
+          Authorization: `Bearer ${this._user.token}`
+        }
+      );
+    }
+
     connectedCallback() {
-      if (this.src) {
-        this.loadJSON(this.src);
-      }
+      this._authObserver.observe(({ user }) => {
+        this._user = user;
+        console.log("USER: ", user);
+        if (this.src) {
+          this.loadJSON(this.src);
+        }
+      });
     }
   
     loadJSON(src) {
-      fetch(src)
+      console.log("JSON SRC: ", this.src);
+      fetch(src, {headers: this.authorization ? { Authorization: `Bearer ${this._user.token}` } : {}})
         .then(response => {
           if (!response.ok) {
             throw new Error('Network response was not ok');
           }
+          console.log("Response: ", response);
           return response.json();
         })
         .then(data => this.renderSlots(data))

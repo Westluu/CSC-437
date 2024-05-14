@@ -12,18 +12,41 @@
     <link rel="stylesheet" href="/styles/tokens.css" />
     <link rel="stylesheet" href="/styles/page.css" />
     <link rel="stylesheet" href="/styles/form.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "@calpoly/mustang": "/node_modules/@calpoly/mustang/dist/mustang.mjs"
+        }
+      }
+    </script>
     <script type="module" src="/js/post-view.js"></script>
-    <script type="module" src="/js/json-loader.js"></script>
-    <script type="module" src="/js/restful-form.js"></script>
     <script type="module">
       import { relayEvent } from "/js/relay-event.js";
       window.relayEvent = relayEvent;
     </script>
-  </head>
-  <body>
-    <post-view src="http://localhost:3000/api/posts/john"></post-view>
+    <script type="module">
+      function toggleDarkMode(page, checked) {
+        page.classList.toggle("dark-mode", checked);
+      }
 
-    <restful-form slot="form" src="http://localhost:3000/api/posts/john">
+      document.body.addEventListener("dark-mode", (event) =>
+        toggleDarkMode(event.currentTarget, event.detail.checked)
+      );
+    </script>
+    <script type="module">
+      import { define, Auth } from "@calpoly/mustang";
+
+      define({ "mu-auth": Auth.Provider });
+    </script>
+  </head>
+  <body class="page">
+    <mu-auth provides="cluster0:auth" redirect="../login.html">
+    <!-- <main> -->
+    <post-view src="http://localhost:3000/api/posts/john"> </post-view>
+    <!-- </main> -->
+    </mu-auth>
+
+    <!-- <restful-form slot="form" src="http://localhost:3000/api/posts/john">
       <label>
         <span>Title</span>
         <input name="title" value="John's Memorable Catch at Grand Lake" />
@@ -55,7 +78,7 @@
       <label>
         <span>Description</span>
         <textarea name="description">
-What an amazing spot here at Grand Lake, caught so many bass here!</textarea
+          What an amazing spot here at Grand Lake, caught so many bass here!</textarea
         >
       </label>
       <button slot="delete" onclick="relayEvent(event,'restful-form:delete')">
@@ -65,6 +88,43 @@ What an amazing spot here at Grand Lake, caught so many bass here!</textarea
 
     <json-object src="http://localhost:3000/api/posts/bob">
       <a href="#" onclick="relayEvent(event, 'json-object:open')"> Posts </a>
-    </json-object>
+    </json-object> -->
   </body>
 </html>
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,200;0,400;0,700;1,700&family=Merriweather:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles/reset.css" />
+    <link rel="stylesheet" href="/styles/tokens.css" />
+    <link rel="stylesheet" href="/styles/page.css" />
+    <link rel="stylesheet" href="/styles/form.css" />
+    <script type="module" src="/js/post-view.js"></script>
+    <script type="module" src="/js/json-loader.js"></script>
+    <script type="module" src="/js/restful-form.js"></script>
+    <script type="module">
+      import { relayEvent } from "/js/relay-event.js";
+      window.relayEvent = relayEvent;
+    </script>
+    <script type="module">
+      import { define, Auth } from "@calpoly/mustang";
+      define({ "mu-auth": Auth.Provider });
+    </script>
+    <script type="importmap">
+      {
+        "imports": {
+          "@calpoly/mustang": "/node_modules/@calpoly/mustang/dist/mustang.mjs"
+        }
+      }
+    </script>
+  </head>
+  <body>
+  </body>
+</html> -->
