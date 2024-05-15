@@ -25,6 +25,7 @@
       import { relayEvent } from "../js/relay-event.js";
       window.relayEvent = relayEvent;
     </script>
+
     <script type="module">
       function toggleDarkMode(page, checked) {
         page.classList.toggle("dark-mode", checked);
@@ -34,11 +35,12 @@
         toggleDarkMode(event.currentTarget, event.detail.checked)
       );
     </script>
+
     <script type="module">
       import { define, Auth } from "@calpoly/mustang";
-
       define({ "mu-auth": Auth.Provider });
     </script>
+
     <script>
       const parser = new DOMParser();
 
@@ -56,22 +58,29 @@
     </script>
     <script type="module" src="../js/drop_down.js"></script>
   </head>
-  <body>
-    <header>
-      <h1>Fishing 𓆝</h1>
-      <drop-down>
-        <label id="dark-mode-switch">
-          <input type="checkbox" id="darkModeCheckbox" autocomplete="off" />
-          Dark mode
-        </label>
-      </drop-down>
-      <a href="#" onclick="relayEvent(event, 'auth:message', ['auth/signout'])">
-        Sign out
-      </a>
-    </header>
 
-    <main>
-      <mu-auth provides="fishing:auth" redirect="../login.html">
+  <body>
+    <mu-auth provides="fishing:auth" redirect="../login.html">
+      
+      <header>
+        <a href="../index.html">
+          <h1>Fishing 𓆝</h1>
+        </a>
+        <drop-down>
+          <label id="dark-mode-switch">
+            <input type="checkbox" id="darkModeCheckbox" autocomplete="off" />
+            Dark mode
+          </label>
+        </drop-down>
+        <a
+          href="#"
+          onclick="relayEvent(event, 'auth:message', ['auth/signout'])"
+        >
+          Sign out
+        </a>
+      </header>
+
+      <main>
         <post-view src="/api/posts/john"> </post-view>
 
         <restful-form slot="form" src="/api/posts/john">
@@ -102,8 +111,8 @@
             >
           </label>
         </restful-form>
-      </mu-auth>
-    </main>
+      </main>
+    </mu-auth>
     <!-- 
     <json-object src="/api/posts/bob">
       <a href="#" onclick="relayEvent(event, 'json-object:open')"> Posts </a>

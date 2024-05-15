@@ -68,8 +68,16 @@ export class PostViewElement extends HTMLElement {
   connectedCallback() {
     this._authObserver.observe(({ user }) => {
       this._user = user;
-      if (this.src) {
-        loadJSON(this.src, this, this.renderSlots.bind(this), this.authorization);
+      if (this._user?.authenticated) {
+        if (this.src) {
+          loadJSON(this.src, this, this.renderSlots.bind(this), this.authorization);
+        } else {
+          loadJSON(this.src, this, this.renderSlots.bind(this), this.authorization);
+        }
+      } else {
+        console.log("User is not authenticated. Skipping data load.");
+        // Optionally, you can clear any existing content or display a message.
+        this.shadowRoot.innerHTML = "<p>User is not authenticated. No data to display.</p>";
       }
     });
   }
