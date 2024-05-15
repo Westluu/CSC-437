@@ -37,13 +37,18 @@ const router = import_express.default.Router();
 router.get("/", (req, res) => {
   import_post_svc.default.index().then((list) => res.json(list)).catch((err) => res.status(500).send(err));
 });
-router.get("/:userid", (req, res) => {
-  const { userid } = req.params;
-  import_post_svc.default.get(userid).then((post) => res.json(post)).catch((err) => res.status(404).end(err));
+router.get("/:id", (req, res) => {
+  const { id } = req.params;
+  import_post_svc.default.get(id).then((post) => res.json(post)).catch((err) => res.status(404).end(err));
 });
 router.post("/", (req, res) => {
   console.log("here");
   const newPost = req.body;
   import_post_svc.default.create(newPost).then((post) => res.status(201).send(post)).catch((err) => res.status(500).send(err));
+});
+router.put("/:id", (req, res) => {
+  const { id } = req.params;
+  const newPost = req.body;
+  import_post_svc.default.update(id, newPost).then((profile) => res.json(profile)).catch((err) => res.status(404).end(err));
 });
 var posts_default = router;

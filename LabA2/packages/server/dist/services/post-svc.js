@@ -81,13 +81,25 @@ let posts = [
 function index() {
   return PostModel.find();
 }
-function get(userid) {
-  return PostModel.find({ userid }).then((list) => list[0]).catch((err) => {
-    throw `${userid} Not Found`;
+function get(id) {
+  return PostModel.find({ id }).then((list) => list[0]).catch((err) => {
+    throw `${id} Not Found`;
+  });
+}
+function update(id, post) {
+  return PostModel.findOne({ id }).then((found) => {
+    if (!found) throw `${id} Not Found`;
+    else
+      return PostModel.findByIdAndUpdate(found._id, post, {
+        new: true
+      });
+  }).then((updated) => {
+    if (!updated) throw `${id} not updated`;
+    else return updated;
   });
 }
 function create(post) {
   const p = new PostModel(post);
   return p.save();
 }
-var post_svc_default = { index, get, create };
+var post_svc_default = { index, get, create, update };

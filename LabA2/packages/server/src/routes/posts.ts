@@ -12,10 +12,10 @@ router.get("/", (req: Request, res: Response) => {
     .catch((err) => res.status(500).send(err));
 });
 
-router.get("/:userid", (req: Request, res: Response) => {
-  const { userid } = req.params;
+router.get("/:id", (req: Request, res: Response) => {
+  const { id } = req.params;
   posts
-    .get(userid)
+    .get(id)
     .then((post: Post) => res.json(post))
     .catch((err) => res.status(404).end(err));
 });
@@ -28,6 +28,16 @@ router.post("/", (req: Request, res: Response) => {
     .create(newPost)
     .then((post: Post) => res.status(201).send(post))
     .catch((err) => res.status(500).send(err));
+});
+
+router.put("/:id", (req: Request, res: Response) => {
+  const { id } = req.params;
+  const newPost = req.body;
+
+  posts
+    .update(id, newPost)
+    .then((profile: Post) => res.json(profile))
+    .catch((err) => res.status(404).end(err));
 });
 
 // router.get("/:userid", (req: Request, res: Response) => {
