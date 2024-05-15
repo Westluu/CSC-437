@@ -2,6 +2,16 @@ import { prepareTemplate } from "./template.js";
 import { Observer } from "@calpoly/mustang";
 
 export class RestfulFormElement extends HTMLElement {
+  _authObserver = new Observer(this, "cluster0:auth");
+
+  get authorization() {
+    return (
+      this._user?.authenticated && {
+        Authorization: `Bearer ${this._user.token}`
+      }
+    );
+  }
+  
   static observedAttributes = ["src", "new"];
 
   get src() {
@@ -52,13 +62,14 @@ export class RestfulFormElement extends HTMLElement {
 
     this.form.addEventListener("submit", (event) => {
       event.preventDefault();
-      console.log("Submitting form", this._state);
+      // console.log("Submitting form", this._state);
       const method = this.isNew ? "POST" : "PUT";
       const action = this.isNew ? "created" : "updated";
       const src = this.isNew
         ? this.src.replace(/[/][$]new$/, "")
         : this.src;
 
+      // console.log("Authorization Header:", this.authorization);
       submitForm(src, this._state, method, this.authorization)
         .then((json) => populateForm(json, this))
         .then((json) => {
@@ -85,42 +96,42 @@ export class RestfulFormElement extends HTMLElement {
     });
   }
 
-  _authObserver = new Observer(this, "cluster0:auth");
-
-  get authorization() {
-    return (
-      this._user?.authenticated && {
-        Authorization: `Bearer ${this._user.token}`
-      }
-    );
-  }
-
   connectedCallback() {
     this._authObserver.observe().then((obs) => {
       obs.setEffect(({ user }) => {
         this._user = user;
+        // console.log("User authenticated:", this._user);
         if (this.src) {
-          loadJSON(
-            this.src,
-            this,
-            renderSlots,
-            this.authorization
-          );
+          loadJSON(this.src, this.authorization);
         }
       });
     });
+  }
+
+  loadJSON(src, authorization) {
+    const a = {headers: authorization};
+    console.log("A: ", a);
+
+    fetch(src, {headers: this.authorization})
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        console.log("Response: ", response);
+        return response.json();
+      })
+      .then(data => this.renderSlots(data))
+      .catch(error => console.error('Error fetching data:', error));
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
     switch (name) {
       case "src":
         if (newValue && newValue !== oldValue && !this.isNew) {
-          fetchData(this.src, this.authorization).then(
-            (json) => {
-              this._state = json;
-              populateForm(json, this);
-            }
-          );
+          fetchData(this.src, this.authorization).then((json) => {
+            this._state = json;
+            populateForm(json, this);
+          });
         }
         break;
       case "new":
@@ -136,16 +147,16 @@ export class RestfulFormElement extends HTMLElement {
 customElements.define("restful-form", RestfulFormElement);
 
 export function fetchData(src, authorization) {
+  // console.log("Fetching data with authorization:", authorization);
   return fetch(src, { headers: authorization })
     .then((response) => {
       if (response.status !== 200) {
         throw `Status: ${response.status}`;
       }
+      console.log("FETCH: ", response);
       return response.json();
     })
-    .catch((error) =>
-      console.log(`Failed to load form from ${src}:`, error)
-    );
+    .catch((error) => console.log(`Failed to load form from ${src}:`, error));
 }
 
 function populateForm(json, formBody) {
@@ -154,11 +165,10 @@ function populateForm(json, formBody) {
   for (const [key, val] of entries) {
     const input = formBody.querySelector(`[name="${key}"]`);
 
-    // console.log(`Populating ${key}`, input);
     if (input) {
       switch (input.type) {
         case "checkbox":
-          input.checked = Boolean(value);
+          input.checked = Boolean(val);
           break;
         default:
           input.value = val;
@@ -170,12 +180,8 @@ function populateForm(json, formBody) {
   return json;
 }
 
-function submitForm(
-  src,
-  json,
-  method = "PUT",
-  authorization = {}
-) {
+function submitForm(src, json, method = "PUT", authorization) {
+  // console.log("Submitting form to:", src);
   return fetch(src, {
     method,
     headers: {
@@ -185,8 +191,9 @@ function submitForm(
     body: JSON.stringify(json)
   })
     .then((res) => {
-      if (res.status != 200 && res.status != 201)
+      if (res.status != 200 && res.status != 201) {
         throw `Form submission failed: Status ${res.status}`;
+      }
       return res.json();
     })
     .catch((err) => console.log("Error submitting form:", err));

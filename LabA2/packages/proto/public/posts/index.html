@@ -8,10 +8,10 @@
       href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,200;0,400;0,700;1,700&family=Merriweather:wght@400;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/styles/reset.css" />
-    <link rel="stylesheet" href="/styles/tokens.css" />
-    <link rel="stylesheet" href="/styles/page.css" />
-    <link rel="stylesheet" href="/styles/form.css" />
+    <link rel="stylesheet" href="../styles/page.css" />
+    <link rel="stylesheet" href="../styles/reset.css" />
+    <link rel="stylesheet" href="../styles/tokens.css" />
+    <link rel="stylesheet" href="../styles/form.css" />
     <script type="importmap">
       {
         "imports": {
@@ -19,9 +19,10 @@
         }
       }
     </script>
-    <script type="module" src="/js/post-view.js"></script>
+    <script type="module" src="../js/post-view.js"></script>
+    <script type="module" src="../js/restful-form.js"></script>
     <script type="module">
-      import { relayEvent } from "/js/relay-event.js";
+      import { relayEvent } from "../js/relay-event.js";
       window.relayEvent = relayEvent;
     </script>
     <script type="module">
@@ -38,15 +39,44 @@
 
       define({ "mu-auth": Auth.Provider });
     </script>
-  </head>
-  <body class="page">
-    <mu-auth provides="cluster0:auth" redirect="../login.html">
-    <!-- <main> -->
-    <post-view src="http://localhost:3000/api/posts/john"> </post-view>
-    <!-- </main> -->
-    </mu-auth>
+    <script>
+      const parser = new DOMParser();
 
-    <!-- <restful-form slot="form" src="http://localhost:3000/api/posts/john">
+      function addFragment(htmlString, container) {
+        const doc = parser.parseFromString(htmlString, "text/html");
+        const fragment = Array.from(doc.body.childNodes);
+        container.append(...fragment);
+      }
+
+      function addFragmentFrom(url, container) {
+        fetch(url)
+          .then((res) => res.text())
+          .then((text) => addFragment(text, container));
+      }
+    </script>
+    <script type="module" src="../js/drop_down.js"></script>
+  </head>
+  <body>
+    <header>
+      <h1>Fishing 𓆝</h1>
+      <drop-down>
+        <label id="dark-mode-switch">
+          <input type="checkbox" id="darkModeCheckbox" autocomplete="off" />
+          Dark mode
+        </label>
+      </drop-down>
+      <a href="#" onclick="relayEvent(event, 'auth:message', ['auth/signout'])">
+        Sign out
+      </a>
+    </header>
+
+    <main>
+      <mu-auth provides="cluster0:auth" redirect="../login.html">
+        <post-view src="/api/posts/john"> </post-view>
+      </mu-auth>
+    </main>
+
+    <restful-form slot="form" src="/api/posts/john">
       <label>
         <span>Title</span>
         <input name="title" value="John's Memorable Catch at Grand Lake" />
@@ -55,14 +85,14 @@
         <span>Image URL</span>
         <input name="image" value="./images/bob.jpg" />
       </label>
-      <label>
+      <!-- <label>
         <span>Date</span>
         <input
           type="datetime-local"
           name="date"
           value="2024-05-11T23:29:00.000+00:00"
         />
-      </label>
+      </label> -->
       <label>
         <span>Location</span>
         <input name="location" value="Grand Lake" />
@@ -81,50 +111,13 @@
           What an amazing spot here at Grand Lake, caught so many bass here!</textarea
         >
       </label>
-      <button slot="delete" onclick="relayEvent(event,'restful-form:delete')">
+      <!-- <button slot="delete" onclick="relayEvent(event,'restful-form:delete')">
         Delete this Post
-      </button>
+      </button> -->
     </restful-form>
-
-    <json-object src="http://localhost:3000/api/posts/bob">
+    <!-- 
+    <json-object src="/api/posts/bob">
       <a href="#" onclick="relayEvent(event, 'json-object:open')"> Posts </a>
     </json-object> -->
   </body>
 </html>
-
-<!-- <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,200;0,400;0,700;1,700&family=Merriweather:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="/styles/reset.css" />
-    <link rel="stylesheet" href="/styles/tokens.css" />
-    <link rel="stylesheet" href="/styles/page.css" />
-    <link rel="stylesheet" href="/styles/form.css" />
-    <script type="module" src="/js/post-view.js"></script>
-    <script type="module" src="/js/json-loader.js"></script>
-    <script type="module" src="/js/restful-form.js"></script>
-    <script type="module">
-      import { relayEvent } from "/js/relay-event.js";
-      window.relayEvent = relayEvent;
-    </script>
-    <script type="module">
-      import { define, Auth } from "@calpoly/mustang";
-      define({ "mu-auth": Auth.Provider });
-    </script>
-    <script type="importmap">
-      {
-        "imports": {
-          "@calpoly/mustang": "/node_modules/@calpoly/mustang/dist/mustang.mjs"
-        }
-      }
-    </script>
-  </head>
-  <body>
-  </body>
-</html> -->

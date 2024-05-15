@@ -68,14 +68,16 @@ export class PostViewElement extends HTMLElement {
         this._user = user;
         console.log("USER: ", user);
         if (this.src) {
-          this.loadJSON(this.src);
+          this.loadJSON(this.src, this.authorization);
         }
       });
     }
   
-    loadJSON(src) {
-      console.log("JSON SRC: ", this.src);
-      fetch(src, {headers: this.authorization ? { Authorization: `Bearer ${this._user.token}` } : {}})
+    loadJSON(src, authorization) {
+      const a = {headers: authorization};
+      console.log("A: ", a);
+
+      fetch(src, {headers: this.authorization})
         .then(response => {
           if (!response.ok) {
             throw new Error('Network response was not ok');
