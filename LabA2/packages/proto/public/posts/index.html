@@ -71,50 +71,39 @@
     </header>
 
     <main>
-      <mu-auth provides="cluster0:auth" redirect="../login.html">
+      <mu-auth provides="fishing:auth" redirect="../login.html">
         <post-view src="/api/posts/john"> </post-view>
+
+        <restful-form slot="form" src="/api/posts/john">
+          <label>
+            <span>Title</span>
+            <input name="title" value="John's Memorable Catch at Grand Lake" />
+          </label>
+          <label>
+            <span>Image URL</span>
+            <input name="image" value="./images/bob.jpg" />
+          </label>
+          <label>
+            <span>Location</span>
+            <input name="location" value="Grand Lake" />
+          </label>
+          <label>
+            <span>Fish Caught</span>
+            <input name="fish" value="Bass" />
+          </label>
+          <label>
+            <span>Bait Used</span>
+            <input name="bait" value="Minnows" />
+          </label>
+          <label>
+            <span>Description</span>
+            <textarea name="description">
+              What an amazing spot here at Grand Lake, caught so many bass here!</textarea
+            >
+          </label>
+        </restful-form>
       </mu-auth>
     </main>
-
-    <restful-form slot="form" src="/api/posts/john">
-      <label>
-        <span>Title</span>
-        <input name="title" value="John's Memorable Catch at Grand Lake" />
-      </label>
-      <label>
-        <span>Image URL</span>
-        <input name="image" value="./images/bob.jpg" />
-      </label>
-      <!-- <label>
-        <span>Date</span>
-        <input
-          type="datetime-local"
-          name="date"
-          value="2024-05-11T23:29:00.000+00:00"
-        />
-      </label> -->
-      <label>
-        <span>Location</span>
-        <input name="location" value="Grand Lake" />
-      </label>
-      <label>
-        <span>Fish Caught</span>
-        <input name="fish" value="Bass" />
-      </label>
-      <label>
-        <span>Bait Used</span>
-        <input name="bait" value="Minnows" />
-      </label>
-      <label>
-        <span>Description</span>
-        <textarea name="description">
-          What an amazing spot here at Grand Lake, caught so many bass here!</textarea
-        >
-      </label>
-      <!-- <button slot="delete" onclick="relayEvent(event,'restful-form:delete')">
-        Delete this Post
-      </button> -->
-    </restful-form>
     <!-- 
     <json-object src="/api/posts/bob">
       <a href="#" onclick="relayEvent(event, 'json-object:open')"> Posts </a>
