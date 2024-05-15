@@ -60,8 +60,7 @@
   </head>
 
   <body>
-    <mu-auth provides="fishing:auth" redirect="../login.html">
-      
+    <mu-auth provides="fishing:auth" redirect="/login.html?next=./posts/">
       <header>
         <a href="../index.html">
           <h1>Fishing 𓆝</h1>
@@ -72,6 +71,7 @@
             Dark mode
           </label>
         </drop-down>
+
         <a
           href="#"
           onclick="relayEvent(event, 'auth:message', ['auth/signout'])"
