@@ -4,6 +4,7 @@ import posts from "./routes/posts";
 import path from "path";
 import { connect } from "./services/mongo";
 import auth, { authenticateUser } from "./routes/auth";
+import fs from "node:fs/promises";
 
 const cors = require("cors");
 
@@ -23,8 +24,16 @@ const nodeModules = path.resolve(__dirname, "../../../node_modules");
 console.log("Serving NPM packages from", nodeModules);
 app.use("/node_modules", express.static(nodeModules));
 
-// app.use("/api/posts", posts);
-app.use("/api/posts", authenticateUser, posts);
+// SPA Routes: /app/...
+app.use("/app", (req: Request, res: Response) => {
+  const indexHtml = path.resolve(staticDir, "index.html");
+  fs.readFile(indexHtml, { encoding: "utf8" }).then((html) =>
+    res.send(html)
+  );
+});
+
+app.use("/api/posts", posts);
+// app.use("/api/posts", authenticateUser, posts);
 
 app.get("/hello", (req: Request, res: Response) => {
   res.send("Hello, World");

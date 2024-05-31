@@ -26,6 +26,7 @@ var import_posts = __toESM(require("./routes/posts"));
 var import_path = __toESM(require("path"));
 var import_mongo = require("./services/mongo");
 var import_auth = __toESM(require("./routes/auth"));
+var import_promises = __toESM(require("node:fs/promises"));
 const cors = require("cors");
 (0, import_mongo.connect)("cluster0");
 const app = (0, import_express.default)();
@@ -38,7 +39,13 @@ app.use("/auth", import_auth.default);
 const nodeModules = import_path.default.resolve(__dirname, "../../../node_modules");
 console.log("Serving NPM packages from", nodeModules);
 app.use("/node_modules", import_express.default.static(nodeModules));
-app.use("/api/posts", import_auth.authenticateUser, import_posts.default);
+app.use("/app", (req, res) => {
+  const indexHtml = import_path.default.resolve(staticDir, "index.html");
+  import_promises.default.readFile(indexHtml, { encoding: "utf8" }).then(
+    (html) => res.send(html)
+  );
+});
+app.use("/api/posts", import_posts.default);
 app.get("/hello", (req, res) => {
   res.send("Hello, World");
 });
