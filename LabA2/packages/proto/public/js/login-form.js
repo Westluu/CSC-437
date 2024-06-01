@@ -33,6 +33,7 @@ export class LoginFormElement extends HTMLElement {
         "auth/signin",
         { token, redirect }
       ]);
+
     });
   }
 }
