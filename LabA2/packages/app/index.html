@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- <title>Dark Mode Switch</title> -->
+    <link rel="stylesheet" href="/styles/reset.css" />
+    <link rel="stylesheet" href="/styles/page.css" />
+    <link rel="stylesheet" href="/styles/tokens.css" />
+  </head>
+  <script>
+    const parser = new DOMParser();
+
+    function addFragment(htmlString, container) {
+      const doc = parser.parseFromString(htmlString, "text/html");
+      const fragment = Array.from(doc.body.childNodes);
+      container.append(...fragment);
+    }
+
+    function addFragmentFrom(url, container) {
+      fetch(url)
+        .then((res) => res.text())
+        .then((text) => addFragment(text, container));
+    }
+  </script>
+
+  <script type="module" src="/src/main"></script>
+
+  <!-- <script type="module">
+    import { define, Auth, Events } from "@calpoly/mustang";
+    import { FishingHeaderElement } from "/src/components/fishing-header";
+
+    define({
+      "mu-auth": Auth.Provider,
+      "fishing-header": FishingHeaderElement,
+    });
+
+    window.relayEvent = Events.relay;
+  </script> -->
+
+  <body>
+    <mu-history provides="fishing:history">
+      <mu-auth provides="fishing:auth" redirect="./login.html">
+        <mu-store provides="fishing:model">
+          <fishing-header> </fishing-header>
+          <landing-view></landing-view>
+          <!-- <post-view post-id="bob"></post-view> -->
+          <mu-switch></mu-switch>
+          <!-- <lake-list></lake-list> -->
+
+          <!-- <main> -->
+          <!-- <section id="posts">
+              <h2>Recent Catches</h2>
+              <article>
+                <h3>John's Memorable Catch at Grand Lake</h3>
+                <details>
+                  <summary>Click to View More</summary>
+                  <img
+                    src="./images/bob.jpg "
+                    alt="John holding a large bass at Grand Lake"
+                    width="300"
+                  />
+                  <p class="date">April 14, 2024 6:00PM</p>
+                  <p>
+                    <strong>Location:</strong>
+                    <a href="./grand_lake.html">Grand Lake</a>
+                  </p>
+                  <p>
+                    <strong>Fish Caught: </strong
+                    ><a href="./fishes/bass.html">Bass </a>
+                  </p>
+                  <p>
+                    <strong>Bait Used:</strong>
+                    <a href="./baits/minnow.html"> Minnows </a>
+                  </p>
+                  <p>
+                    What an amazing spot here at grand lake, caught some many bass
+                    here!
+                  </p>
+                </details>
+              </article>
+            </section> -->
+
+          <!-- <section id="locations">
+              <h2>Lakes (Click For Quick View)</h2>
+              <ul>
+                <li>
+                  <a
+                    onclick="addFragmentFrom('./lakes/american_river.html', event.target.closest('li'))"
+                  >
+                    American River
+                  </a>
+                </li>
+                <li>
+                  <a
+                    onclick="addFragmentFrom('./lakes/grand_lake.html', event.target.closest('li'))"
+                  >
+                    Grand Lake
+                  </a>
+                </li>
+                <li>
+                  <a
+                    onclick="addFragmentFrom('./lakes/lake_fork.html', event.target.closest('li'))"
+                  >
+                    Lake Fork
+                  </a>
+                </li>
+                <li>
+                  <a
+                    onclick="addFragmentFrom('./lakes/clear_lake.html', event.target.closest('li'))"
+                  >
+                    Clear Lake
+                  </a>
+                </li>
+              </ul>
+            </section>
+
+            <section id="fishes">
+              <h2>Fishes (Click For Quick View)</h2>
+              <ul>
+                <a
+                  onclick="addFragmentFrom('./fishes/bass.html', event.target.closest('ul'))"
+                >
+                  Bass
+                </a>
+              </ul>
+            </section>
+
+            <section id="baits">
+              <h2>Baits (Click For Quick View)</h2>
+              <ul>
+                <a
+                  onclick="addFragmentFrom('./baits/minnow.html', event.target.closest('ul'))"
+                >
+                  Minnows
+                </a>
+              </ul>
+            </section>
+          </main> -->
+
+          <!-- <script>
+            function toggleDarkMode() {
+              const body = document.body;
+              body.classList.toggle("dark-mode");
+              console.log(
+                "Dark mode toggled:",
+                body.classList.contains("dark-mode")
+              );
+            }
+  
+            document
+              .getElementById("darkModeCheckbox")
+              .addEventListener("change", toggleDarkMode);
+          </script> -->
+        </mu-store>
+      </mu-auth>
+    </mu-history>
+  </body>
+</html>
