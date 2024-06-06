@@ -51,7 +51,7 @@ export class PostListElement extends View<Model, Msg> {
     .date,
     .location,
     .fish,
-    .bait{
+    .bait {
       font-size: 0.9em;
       color: #888;
     }

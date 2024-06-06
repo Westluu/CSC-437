@@ -15,6 +15,7 @@ export class PostEditorElement extends LitElement {
       background: #f9f9f9;
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin-top: 20px;
     }
     form {
       display: grid;
@@ -25,21 +26,25 @@ export class PostEditorElement extends LitElement {
       display: flex;
       flex-direction: column;
       font-weight: bold;
+      color: #333;
     }
     input,
     textarea,
     button {
-      padding: 8px;
+      padding: 10px;
       font-size: 16px;
       border: 1px solid #ccc;
       border-radius: 4px;
+      width: 100%;
+    }
+    textarea {
+      resize: vertical;
     }
     button {
       background-color: #007bff;
       color: white;
       cursor: pointer;
       border: none;
-      grid-column: 1 / -1; /* Ensure the button spans across the entire width */
       margin-top: 20px;
       align-self: end;
     }
@@ -49,6 +54,7 @@ export class PostEditorElement extends LitElement {
   `;
 
   _handleSubmit(event: Form.SubmitEvent<Post>) {
+    event.preventDefault();
     const formData = new FormData(event.target as HTMLFormElement);
     const post = Object.fromEntries(formData.entries()) as Partial<Post>;
     this.dispatchEvent(

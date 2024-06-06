@@ -15,29 +15,64 @@ export class PostCreateElement extends View<Model, Msg> {
   @property({ type: Object }) post: Partial<Post> = {};
 
   static styles = css`
+    :host {
+      display: block;
+      padding: 16px;
+      font-family: Arial, sans-serif;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      text-align: center;
+      border-bottom: 2px solid #007bff;
+      padding-bottom: 10px;
+    }
+
     form {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
+
     label {
       display: flex;
       flex-direction: column;
+      font-size: 14px;
+      color: #555;
     }
+
     input,
     textarea {
-      padding: 8px;
-      font-size: 16px;
-    }
-    button {
       padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-top: 5px;
+    }
+
+    textarea {
+      resize: vertical;
+      height: 100px;
+    }
+
+    button {
+      padding: 10px 20px;
       font-size: 16px;
       background-color: #007bff;
       color: white;
       border: none;
       border-radius: 4px;
       cursor: pointer;
+      align-self: center;
     }
+
     button:hover {
       background-color: #0056b3;
     }

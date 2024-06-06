@@ -92,10 +92,13 @@ export class LakeListElement extends LitElement {
       padding: 16px;
       border: 1px solid #ddd;
       border-radius: 8px;
+      display: flex;
     }
 
     .details {
       margin-top: 10px;
+      display: flex;
+      flex-direction: column;
     }
   `;
 

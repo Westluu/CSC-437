@@ -7,7 +7,6 @@ import { PostEditorElement } from "../components/post-editor.ts";
 
 // @ts-ignore
 import { Post } from "server/models";
-// import { Auth } from "@calpoly/mustang";
 
 export class PostViewElement extends View<Model, Msg> {
   static uses = define({
@@ -33,14 +32,32 @@ export class PostViewElement extends View<Model, Msg> {
       padding: 20px;
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+      margin: 20px auto;
+    }
+    h3 {
+      margin-bottom: 10px;
+      color: #333;
     }
     img {
       max-width: 100%;
       height: auto;
       border-radius: 5px;
+      margin-bottom: 10px;
     }
-    details {
-      margin-top: 10px;
+    p {
+      margin: 10px 0;
+      color: #555;
+    }
+    .date,
+    .location,
+    .fish,
+    .bait {
+      font-size: 0.9em;
+      color: #888;
+    }
+    .description {
+      margin-top: 20px;
     }
   `;
 
@@ -115,7 +132,7 @@ export class PostViewElement extends View<Model, Msg> {
         <p><strong>Location:</strong> <slot name="location"></slot></p>
         <p><strong>Fish Caught:</strong> <slot name="fish"></slot></p>
         <p><strong>Bait Used:</strong> <slot name="bait"></slot></p>
-        <p><slot name="description"></slot></p>
+        <p class="description"><slot name="description"></slot></p>
         <post-editor
           .post=${this.post}
           @post-edit:submit=${this._handleSubmit}
