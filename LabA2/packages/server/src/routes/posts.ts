@@ -21,13 +21,15 @@ router.get("/:id", (req: Request, res: Response) => {
 });
 
 router.post("/", (req: Request, res: Response) => {
-  console.log("here");
+  console.log("creating post");
   const newPost = req.body;
-
   posts
     .create(newPost)
     .then((post: Post) => res.status(201).send(post))
-    .catch((err) => res.status(500).send(err));
+    .catch((err) => {
+      console.error("Error creating post:", err);
+      res.status(500).send(err);
+    });
 });
 
 router.put("/:id", (req: Request, res: Response) => {
