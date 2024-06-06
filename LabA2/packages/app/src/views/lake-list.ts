@@ -1,5 +1,6 @@
 import { LitElement, html, css } from "lit";
 import { property, state } from "lit/decorators.js";
+import { unsafeHTML } from "lit-html/directives/unsafe-html.js";
 
 interface Lake {
   name: string;
@@ -12,72 +13,122 @@ export class LakeListElement extends LitElement {
     { name: "Grand Lake", url: "../../lakes/grand_lake.html" },
     { name: "Lake Forth", url: "../../lakes/lake_forth.html" },
     { name: "Clear Lake", url: "../../lakes/clear_lake.html" },
+    { name: "Colorado River", url: "../../lakes/colorado_river.html" },
+    { name: "Mississippi River", url: "../../lakes/miss_river.html" },
+    { name: "Nile River", url: "../../lakes/nile_river.html" },
+    { name: "Amazon River", url: "../../lakes/amazon_river.html" },
+    { name: "Yangtze River", url: "../../lakes/yangtze_river.html" },
   ];
 
   @state() filterTerm: string = "";
-  @state() openLake: string | null = null;
+  @state() selectedLakeContent: string = "";
 
   static styles = css`
+    :host {
+      display: block;
+      padding: 16px;
+      font-family: Arial, sans-serif;
+    }
+
+    h2 {
+      font-size: 24px;
+      margin-bottom: 16px;
+      color: #333;
+    }
+
+    input {
+      padding: 8px;
+      font-size: 16px;
+      width: 100%;
+      max-width: 300px;
+      margin-bottom: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .container {
+      display: flex;
+      gap: 16px;
+    }
+
+    .list {
+      flex: 1;
+    }
+
     ul {
       list-style-type: none;
       padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
     }
+
     li {
-      margin: 10px 0;
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 16px;
+      transition: box-shadow 0.3s ease;
     }
+
+    li:hover {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
     a {
-      color: var(--link-color, blue);
+      color: #007bff;
       text-decoration: none;
-      cursor: pointer;
+      font-weight: bold;
     }
+
     a:hover {
       text-decoration: underline;
+    }
+
+    .details-wrapper {
+      flex: 3;
+      background-color: #fff;
+      padding: 16px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+
+    .details {
+      margin-top: 10px;
     }
   `;
 
   handleInput(event: Event) {
     const input = event.target as HTMLInputElement;
-    if (input && input.value) {
-      this.filterTerm = input.value.toLowerCase();
-      console.log(`Filter term updated: ${this.filterTerm}`);
-    } else {
-      this.filterTerm = "";
-      console.error("Input element not found or value is empty");
-    }
+    this.filterTerm = input.value.toLowerCase();
   }
 
   get filteredLakes() {
-    const filtered = this.lakes.filter((lake) =>
+    return this.lakes.filter((lake) =>
       lake.name.toLowerCase().includes(this.filterTerm)
     );
-    console.log(`Filtered lakes: ${JSON.stringify(filtered)}`);
-    return filtered;
   }
 
   handleClick(event: MouseEvent, lake: Lake) {
     event.preventDefault();
-    if (this.openLake === lake.name) {
-      this.openLake = null; // Close the currently open lake
-    } else {
-      this.openLake = lake.name; // Open the clicked lake
-      const container = (event.currentTarget as HTMLElement).closest("li");
-      if (container) {
-        this.addFragmentFrom(lake.url, container as HTMLElement);
-      }
-    }
+    this.fetchLakeContent(lake.url);
   }
 
-  addFragmentFrom(url: string, container: HTMLElement) {
-    // Clear any existing content
-    container.innerHTML = '';
-    
+  fetchLakeContent(url: string) {
     fetch(url)
-      .then((res) => res.text())
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`Failed to fetch ${url}: ${res.statusText}`);
+        }
+        return res.text();
+      })
       .then((text) => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(text, "text/html");
-        const fragment = Array.from(doc.body.childNodes);
-        container.append(...fragment);
+        this.selectedLakeContent = text;
+      })
+      .catch((error) => {
+        console.error(error);
+        this.selectedLakeContent = `<p>Error loading content: ${error.message}</p>`;
       });
   }
 
@@ -91,22 +142,26 @@ export class LakeListElement extends LitElement {
           .value="${this.filterTerm}"
           @input="${this.handleInput}"
         />
-        <ul>
-          ${this.filteredLakes.map(
-            (lake) => html`
-              <li>
-                <a
-                  href="#"
-                  @click="${(e: MouseEvent) => this.handleClick(e, lake)}"
-                  >${lake.name}</a
-                >
-                ${this.openLake === lake.name
-                  ? html`<div class="details"></div>`
-                  : ""}
-              </li>
-            `
-          )}
-        </ul>
+        <div class="container">
+          <div class="list">
+            <ul>
+              ${this.filteredLakes.map(
+                (lake) => html`
+                  <li>
+                    <a
+                      href="#"
+                      @click="${(e: MouseEvent) => this.handleClick(e, lake)}"
+                      >${lake.name}</a
+                    >
+                  </li>
+                `
+              )}
+            </ul>
+          </div>
+          <div class="details-wrapper">
+            <div class="details">${unsafeHTML(this.selectedLakeContent)}</div>
+          </div>
+        </div>
       </section>
     `;
   }

@@ -110,15 +110,12 @@ export class PostViewElement extends View<Model, Msg> {
     return html`
       <article>
         <h3><slot name="title"></slot></h3>
-        <details>
-          <summary>Click to View More</summary>
-          <img slot="image" />
-          <p class="date"><slot name="date"></slot></p>
-          <p><strong>Location:</strong> <slot name="location"></slot></p>
-          <p><strong>Fish Caught:</strong> <slot name="fish"></slot></p>
-          <p><strong>Bait Used:</strong> <slot name="bait"></slot></p>
-          <p><slot name="description"></slot></p>
-        </details>
+        <img slot="image" />
+        <p class="date"><slot name="date"></slot></p>
+        <p><strong>Location:</strong> <slot name="location"></slot></p>
+        <p><strong>Fish Caught:</strong> <slot name="fish"></slot></p>
+        <p><strong>Bait Used:</strong> <slot name="bait"></slot></p>
+        <p><slot name="description"></slot></p>
         <post-editor
           .post=${this.post}
           @post-edit:submit=${this._handleSubmit}

@@ -1,9 +1,15 @@
-// post-list.ts
+declare global {
+  interface Window {
+    initMap: () => void;
+  }
+}
+
 import { html, css } from "lit";
 import { property } from "lit/decorators.js";
 import { define, View } from "@calpoly/mustang";
 import { Model } from "../model";
 import { Msg } from "../messages";
+import "../components/post-comments";
 
 // @ts-ignore
 import { Post } from "server/models";
@@ -45,7 +51,7 @@ export class PostListElement extends View<Model, Msg> {
     .date,
     .location,
     .fish,
-    .bait {
+    .bait{
       font-size: 0.9em;
       color: #888;
     }
@@ -66,19 +72,23 @@ export class PostListElement extends View<Model, Msg> {
       background-color: #0056b3;
     }
     .create-button {
-        display: inline-block;
-        margin-bottom: 20px;
-        padding: 10px 20px;
-        background-color: #28a745;
-        color: white;
-        text-decoration: none;
-        border-radius: 4px;
-        font-size: 16px;
-        cursor: pointer;
-      }
-      .create-button:hover {
-        background-color: #218838;
-      }
+      display: block;
+      margin-bottom: 10px;
+      padding: 10px 15px;
+      background-color: #28a745;
+      color: white;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 4px;
+    }
+    .create-button:hover {
+      background-color: #218838;
+    }
+    .map {
+      height: 300px;
+      width: 100%;
+      margin-top: 10px;
+    }
   `;
 
   constructor() {
@@ -94,14 +104,58 @@ export class PostListElement extends View<Model, Msg> {
   updated(changedProperties: Map<string | number | symbol, unknown>) {
     if (this.model.posts) {
       this.posts = this.model.posts || [];
+      this.initMap(); // Ensure maps are initialized when posts are updated
     }
+  }
+
+  firstUpdated() {
+    if (!document.querySelector("#google-maps-script")) {
+      const script = document.createElement("script");
+      script.id = "google-maps-script";
+      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAlWc-tyXbANQ_ftTUzx-uxwLF81PAjwSU&callback=initMap&libraries=places`;
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+      window.initMap = this.initMap.bind(this);
+    } else {
+      this.initMap(); // Ensure maps are initialized if the script already exists
+    }
+  }
+
+  initMap() {
+    if (!this.posts.length) return;
+
+    this.posts.forEach((post) => {
+      const mapElement = this.shadowRoot?.querySelector(`#map-${post.id}`);
+      if (mapElement) {
+        const map = new google.maps.Map(mapElement, {
+          center: { lat: 38.5816, lng: -121.4944 }, // Default to Sacramento, CA
+          zoom: 15,
+        });
+
+        const geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ address: post.location }, (results, status) => {
+          if (status === "OK" && results) {
+            map.setCenter(results[0].geometry.location);
+            new google.maps.Marker({
+              map,
+              position: results[0].geometry.location,
+            });
+          } else {
+            console.error(
+              "Geocode was not successful for the following reason: " + status
+            );
+          }
+        });
+      }
+    });
   }
 
   render() {
     return html`
       <section id="posts">
         <h2>All Posts</h2>
-        <a class="create-button" href="/app/post/create">Create Post</a>
+        <a class="create-button" href="/app/posts/create">Create Post</a>
         <ul>
           ${this.posts.map(
             (post) => html`
@@ -118,6 +172,11 @@ export class PostListElement extends View<Model, Msg> {
                   <p class="bait">Bait Used: ${post.bait}</p>
                   <p>${post.description}</p>
                 </div>
+                <div id="map-${post.id}" class="map"></div>
+                <post-comments
+                  .comments="${post.comments}"
+                  .postId="${post.id}"
+                ></post-comments>
               </li>
             `
           )}

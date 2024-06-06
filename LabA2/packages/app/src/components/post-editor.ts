@@ -48,14 +48,12 @@ export class PostEditorElement extends LitElement {
     }
   `;
 
-  static uses = define({
-    "mu-form": Form.Element,
-  });
-
   _handleSubmit(event: Form.SubmitEvent<Post>) {
+    const formData = new FormData(event.target as HTMLFormElement);
+    const post = Object.fromEntries(formData.entries()) as Partial<Post>;
     this.dispatchEvent(
       new CustomEvent("post-edit:submit", {
-        detail: event.detail,
+        detail: post,
         bubbles: true,
         composed: true,
       })
@@ -64,49 +62,44 @@ export class PostEditorElement extends LitElement {
 
   render() {
     return html`
-      <mu-form @mu-form:submit="${this._handleSubmit}">
-        <form>
-          <label>
-            Title
-            <input
-              type="text"
-              name="title"
-              .value="${this.post?.title || ""}"
-              required
-            />
-          </label>
-          <label>
-            Image URL
-            <input
-              type="text"
-              name="image"
-              .value="${this.post?.image || ""}"
-            />
-          </label>
-          <label>
-            Location
-            <input
-              type="text"
-              name="location"
-              .value="${this.post?.location || ""}"
-            />
-          </label>
-          <label>
-            Fish Caught
-            <input type="text" name="fish" .value="${this.post?.fish || ""}" />
-          </label>
-          <label>
-            Bait Used
-            <input type="text" name="bait" .value="${this.post?.bait || ""}" />
-          </label>
-          <label>
-            Description
-            <textarea name="description" rows="3">
+      <form @submit="${this._handleSubmit}">
+        <label>
+          Title
+          <input
+            type="text"
+            name="title"
+            .value="${this.post?.title || ""}"
+            required
+          />
+        </label>
+        <label>
+          Image URL
+          <input type="text" name="image" .value="${this.post?.image || ""}" />
+        </label>
+        <label>
+          Location
+          <input
+            type="text"
+            name="location"
+            .value="${this.post?.location || ""}"
+          />
+        </label>
+        <label>
+          Fish Caught
+          <input type="text" name="fish" .value="${this.post?.fish || ""}" />
+        </label>
+        <label>
+          Bait Used
+          <input type="text" name="bait" .value="${this.post?.bait || ""}" />
+        </label>
+        <label>
+          Description
+          <textarea name="description" rows="3">
 ${this.post?.description || ""}</textarea
-            >
-          </label>
-        </form>
-      </mu-form>
+          >
+        </label>
+        <button type="submit">Edit Post</button>
+      </form>
     `;
   }
 }

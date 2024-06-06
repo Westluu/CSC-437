@@ -13,7 +13,6 @@ export class PostCreateElement extends View<Model, Msg> {
   username = "anonymous";
 
   @property({ type: Object }) post: Partial<Post> = {};
-  
 
   static styles = css`
     form {
@@ -52,10 +51,7 @@ export class PostCreateElement extends View<Model, Msg> {
     super("fishing:model");
   }
 
-  _authObserver = new Observer<Auth.Model>(
-    this,
-    "fishing:auth"
-  );
+  _authObserver = new Observer<Auth.Model>(this, "fishing:auth");
 
   connectedCallback() {
     super.connectedCallback();
@@ -74,7 +70,7 @@ export class PostCreateElement extends View<Model, Msg> {
     post = {
       ...post,
       id: this.username,
-      image: "../public/image/bob",
+      image: "../public/images/bob",
       date: "2024-05-05T00:29:00.000+00:00",
     };
     console.log("POST: ", post);
@@ -84,7 +80,7 @@ export class PostCreateElement extends View<Model, Msg> {
         post,
         onSuccess: () => {
           alert("Post created successfully!");
-          History.dispatch(this, "history/navigate", { href: `/app/post/${post.id}` });
+          History.dispatch(this, "history/navigate", { href: `/app/posts` });
         },
         onFailure: (error) => {
           console.error("Error creating post:", error);
@@ -110,12 +106,8 @@ export class PostCreateElement extends View<Model, Msg> {
         <label>
           Content
           <textarea name="content" required>
-${this.post.content || ""}</textarea>
+${this.post.content || ""}</textarea
           >
-        </label>
-        <label>
-          Image URL
-          <input type="text" name="image" .value="${this.post.image || ""}" />
         </label>
         <label>
           Location

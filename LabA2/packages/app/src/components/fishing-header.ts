@@ -9,6 +9,8 @@ export class FishingHeaderElement extends LitElement {
     return html`
       <header>
         <h1>Fishing 𓆝</h1>
+        <a href="/app/posts"> Posts </a>
+        <a href="/app/lakes"> Lakes </a>
         <drop-down>
           <label @change=${this.toggleDarkMode}>
             <input type="checkbox" autocomplete="off" />
@@ -23,7 +25,6 @@ export class FishingHeaderElement extends LitElement {
   static styles = css`
     header {
       display: flex;
-      justify-content: space-between;
       align-items: center;
       background-color: blue;
       color: white;
@@ -35,6 +36,7 @@ export class FishingHeaderElement extends LitElement {
       margin: 0 10px;
     }
     drop-down {
+      left: 80%;
       margin: 0 10px;
     }
     h1 {
