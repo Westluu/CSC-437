@@ -42,16 +42,20 @@ router.get("/:id", (req, res) => {
   import_post_svc.default.get(id).then((post) => res.status(200).json(post)).catch((err) => res.status(404).end(err));
 });
 router.post("/", (req, res) => {
-  console.log("creating post");
   const newPost = req.body;
-  import_post_svc.default.create(newPost).then((post) => res.status(201).send(post)).catch((err) => {
-    console.error("Error creating post:", err);
-    res.status(500).send(err);
-  });
+  import_post_svc.default.create(newPost).then((post) => res.status(201).send(post)).catch((err) => res.status(500).send(err));
 });
 router.put("/:id", (req, res) => {
   const { id } = req.params;
   const newPost = req.body;
-  import_post_svc.default.update(id, newPost).then((profile) => res.json(profile)).catch((err) => res.status(404).end(err));
+  import_post_svc.default.update(id, newPost).then((post) => res.json(post)).catch((err) => res.status(404).end(err));
+});
+router.post("/:id/comments", (req, res) => {
+  const { id } = req.params;
+  const newComment = req.body;
+  import_post_svc.default.addComment(id, newComment).then((post) => res.status(201).send(post)).catch((err) => res.status(500).send(err));
+});
+router.post("/image", (req, res) => {
+  const { id, file } = req.params;
 });
 var posts_default = router;

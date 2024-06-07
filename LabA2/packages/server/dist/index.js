@@ -26,13 +26,14 @@ var import_posts = __toESM(require("./routes/posts"));
 var import_path = __toESM(require("path"));
 var import_mongo = require("./services/mongo");
 var import_auth = __toESM(require("./routes/auth"));
-var import_promises = __toESM(require("node:fs/promises"));
+var import_aws_sdk = __toESM(require("aws-sdk"));
+var import_uuid = require("uuid");
 const cors = require("cors");
 (0, import_mongo.connect)("cluster0");
 const app = (0, import_express.default)();
 app.use(cors());
 const port = process.env.PORT || 3e3;
-const staticDir = process.env.STATIC || "public";
+const staticDir = process.env.STATIC || import_path.default.resolve(__dirname, "../public");
 app.use(import_express.default.static(staticDir));
 app.use(import_express.default.json());
 app.use("/auth", import_auth.default);
@@ -41,8 +42,31 @@ console.log("Serving NPM packages from", nodeModules);
 app.use("/node_modules", import_express.default.static(nodeModules));
 app.use("/app", (req, res) => {
   const indexHtml = import_path.default.resolve(staticDir, "index.html");
-  import_promises.default.readFile(indexHtml, { encoding: "utf8" }).then(
-    (html) => res.send(html)
+  res.sendFile(indexHtml);
+});
+const s3 = new import_aws_sdk.default.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_REGION
+});
+app.post("/api/s3/presigned-url", (req, res) => {
+  const { filename, filetype } = req.body;
+  const key = `uploads/${(0, import_uuid.v4)()}-${filename}`;
+  s3.getSignedUrl(
+    "putObject",
+    {
+      Bucket: process.env.AWS_BUCKET_NAME,
+      Key: key,
+      Expires: 60,
+      ContentType: filetype
+    },
+    (err, url) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send(err);
+      }
+      res.json({ url, key });
+    }
   );
 });
 app.use("/api/posts", import_posts.default);

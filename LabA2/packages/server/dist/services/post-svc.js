@@ -1,7 +1,9 @@
 "use strict";
+var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
   for (var name in all)
@@ -15,49 +17,48 @@ var __copyProps = (to, from, except, desc) => {
   }
   return to;
 };
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 var post_svc_exports = {};
 __export(post_svc_exports, {
   default: () => post_svc_default
 });
 module.exports = __toCommonJS(post_svc_exports);
-var import_mongoose = require("mongoose");
-const PostSchema = new import_mongoose.Schema(
-  {
-    id: { type: String, required: true, trim: true },
-    title: { type: String, required: true, trim: true },
-    image: { type: String, trim: true },
-    location: { type: String, trim: true },
-    date: { type: Date },
-    fish: { type: String },
-    bait: { type: String },
-    description: { type: String }
-  },
-  { collection: "user_posts" }
-);
-const PostModel = (0, import_mongoose.model)("Post", PostSchema);
+var import_post = __toESM(require("../models/post"));
 function index() {
-  return PostModel.find();
+  return import_post.default.find().exec();
 }
 function get(id) {
-  return PostModel.find({ id }).then((list) => list[0]).catch((err) => {
-    throw `${id} Not Found`;
+  return import_post.default.findOne({ id }).exec().then((post) => {
+    if (!post) throw `${id} Not Found`;
+    return post;
   });
 }
 function update(id, post) {
-  return PostModel.findOne({ id }).then((found) => {
-    if (!found) throw `${id} Not Found`;
-    else
-      return PostModel.findByIdAndUpdate(found._id, post, {
-        new: true
-      });
-  }).then((updated) => {
+  return import_post.default.findOneAndUpdate({ id }, post, { new: true }).exec().then((updated) => {
     if (!updated) throw `${id} not updated`;
-    else return updated;
+    return updated;
   });
 }
 function create(post) {
-  const p = new PostModel(post);
+  const p = new import_post.default(post);
   return p.save();
 }
-var post_svc_default = { index, get, create, update };
+function addComment(postId, comment) {
+  return import_post.default.findOneAndUpdate(
+    { id: postId },
+    { $push: { comments: comment } },
+    { new: true }
+  ).exec().then((updated) => {
+    if (!updated) throw `${postId} not updated`;
+    return updated;
+  });
+}
+var post_svc_default = { index, get, create, update, addComment };

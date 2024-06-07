@@ -1,6 +1,6 @@
 import { LitElement, html, css } from "lit";
 import { property } from "lit/decorators.js";
-import { define, Form } from "@calpoly/mustang";
+import { define, Form, History } from "@calpoly/mustang";
 
 // @ts-ignore
 import { Post } from "server/models";
@@ -64,6 +64,7 @@ export class PostEditorElement extends LitElement {
         composed: true,
       })
     );
+    History.dispatch(this, "history/navigate", { href: `/app/posts` });
   }
 
   render() {

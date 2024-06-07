@@ -118,7 +118,7 @@ export class PostListElement extends View<Model, Msg> {
       document.head.appendChild(script);
       window.initMap = this.initMap.bind(this);
     } else {
-      this.initMap(); // Ensure maps are initialized if the script already exists
+      this.initMap();
     }
   }
 

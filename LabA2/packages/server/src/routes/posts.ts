@@ -1,7 +1,8 @@
-// src/routes/profiles.ts
+// src/routes/posts.ts
 import express, { Request, Response } from "express";
 import posts from "../services/post-svc";
 import { Post } from "../models/post";
+import { Comment } from "../models/comment";
 
 const router = express.Router();
 
@@ -21,33 +22,36 @@ router.get("/:id", (req: Request, res: Response) => {
 });
 
 router.post("/", (req: Request, res: Response) => {
-  console.log("creating post");
   const newPost = req.body;
   posts
     .create(newPost)
     .then((post: Post) => res.status(201).send(post))
-    .catch((err) => {
-      console.error("Error creating post:", err);
-      res.status(500).send(err);
-    });
+    .catch((err) => res.status(500).send(err));
 });
 
 router.put("/:id", (req: Request, res: Response) => {
   const { id } = req.params;
   const newPost = req.body;
-
   posts
     .update(id, newPost)
-    .then((profile: Post) => res.json(profile))
+    .then((post: Post) => res.json(post))
     .catch((err) => res.status(404).end(err));
 });
 
-// router.get("/:userid", (req: Request, res: Response) => {
-//   const { userid } = req.params;
-//   const got = profiles.get(userid);
+router.post("/:id/comments", (req: Request, res: Response) => {
+  const { id } = req.params;
+  const newComment: Comment = req.body;
+  posts
+    .addComment(id, newComment)
+    .then((post: Post) => res.status(201).send(post))
+    .catch((err) => res.status(500).send(err));
+});
 
-//   if (got) res.send(got);
-//   else res.status(404).end();
-// });
+
+//upload image to AWS S3-bucket
+router.post("/image", (req: Request, res: Response) => {
+  const { id, file } = req.params;
+});
+
 
 export default router;

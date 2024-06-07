@@ -105,7 +105,7 @@ export class PostCreateElement extends View<Model, Msg> {
     post = {
       ...post,
       id: this.username,
-      image: "../public/images/bob",
+      image: "../../public/images/bob.jpg",
       date: "2024-05-05T00:29:00.000+00:00",
     };
     console.log("POST: ", post);

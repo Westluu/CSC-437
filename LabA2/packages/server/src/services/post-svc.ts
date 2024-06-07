@@ -1,46 +1,24 @@
-import { Schema, Model, Document, model } from "mongoose";
-import { Post } from "../models/post";
-
-const PostSchema = new Schema<Post>(
-  {
-    id: { type: String, required: true, trim: true },
-    title: { type: String, required: true, trim: true },
-    image: { type: String, trim: true },
-    location: { type: String, trim: true },
-    date: { type: Date },
-    fish: { type: String },
-    bait: { type: String },
-    description: { type: String },
-  },
-  { collection: "user_posts" }
-);
-
-const PostModel = model<Post>("Post", PostSchema);
+// src/services/post-svc.ts
+import PostModel, { Post } from "../models/post";
+import { Comment } from "../models/comment";
 
 function index(): Promise<Post[]> {
-  return PostModel.find();
+  return PostModel.find().exec();
 }
 
-function get(id: String): Promise<Post> {
-  return PostModel.find({ id })
-    .then((list) => list[0])
-    .catch((err) => {
-      throw `${id} Not Found`;
+function get(id: string): Promise<Post> {
+  return PostModel.findOne({ id }).exec()
+    .then((post) => {
+      if (!post) throw `${id} Not Found`;
+      return post;
     });
 }
 
-function update(id: String, post: Post): Promise<Post> {
-  return PostModel.findOne({ id })
-    .then((found) => {
-      if (!found) throw `${id} Not Found`;
-      else
-        return PostModel.findByIdAndUpdate(found._id, post, {
-          new: true,
-        });
-    })
+function update(id: string, post: Post): Promise<Post> {
+  return PostModel.findOneAndUpdate({ id }, post, { new: true }).exec()
     .then((updated) => {
       if (!updated) throw `${id} not updated`;
-      else return updated as Post;
+      return updated;
     });
 }
 
@@ -49,4 +27,16 @@ function create(post: Post): Promise<Post> {
   return p.save();
 }
 
-export default { index, get, create, update };
+function addComment(postId: string, comment: Comment): Promise<Post> {
+  return PostModel.findOneAndUpdate(
+    { id: postId },
+    { $push: { comments: comment } },
+    { new: true }
+  ).exec()
+    .then((updated) => {
+      if (!updated) throw `${postId} not updated`;
+      return updated;
+    });
+}
+
+export default { index, get, create, update, addComment };

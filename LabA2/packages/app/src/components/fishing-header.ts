@@ -8,7 +8,7 @@ export class FishingHeaderElement extends LitElement {
   render() {
     return html`
       <header>
-        <h1>Fishing 𓆝</h1>
+        <h1>Fish Social 𓆝</h1>
         <a href="/app/posts"> Posts </a>
         <a href="/app/lakes"> Lakes </a>
         <drop-down>
