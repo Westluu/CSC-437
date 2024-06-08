@@ -79,7 +79,7 @@ export class PostViewElement extends View<Model, Msg> {
     super.attributeChangedCallback(name, oldValue, newValue);
   }
 
-  updated(changedProperties: Map<string | number | symbol, unknown>) {
+  updated() {
     if (this.model.post) {
       this.renderSlots(this.model.post);
     }

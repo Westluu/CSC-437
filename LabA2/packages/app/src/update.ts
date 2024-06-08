@@ -36,7 +36,9 @@ export default function update(
         .then((posts) => apply((model) => ({ ...model, posts })))
         .then(() => {
           const { onSuccess } = message[1];
-          if (onSuccess) onSuccess();
+          if (onSuccess){
+            onSuccess();
+          }
         })
         .catch((error: Error) => {
           const { onFailure } = message[1];

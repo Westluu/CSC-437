@@ -1,6 +1,6 @@
 import { LitElement, html, css } from "lit";
 import { property } from "lit/decorators.js";
-import { define, Form, History } from "@calpoly/mustang";
+import { Form, History } from "@calpoly/mustang";
 
 // @ts-ignore
 import { Post } from "server/models";

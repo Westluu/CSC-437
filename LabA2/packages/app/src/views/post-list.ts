@@ -101,7 +101,7 @@ export class PostListElement extends View<Model, Msg> {
     this.dispatchMessage(["post/fetchAll", {}]);
   }
 
-  updated(changedProperties: Map<string | number | symbol, unknown>) {
+  updated() {
     if (this.model.posts) {
       this.posts = this.model.posts || [];
       this.initMap(); // Ensure maps are initialized when posts are updated
@@ -134,7 +134,7 @@ export class PostListElement extends View<Model, Msg> {
         });
 
         const geocoder = new google.maps.Geocoder();
-        geocoder.geocode({ address: post.location }, (results, status) => {
+        geocoder.geocode({ address: post.location }, (results: any, status: any) => {
           if (status === "OK" && results) {
             map.setCenter(results[0].geometry.location);
             new google.maps.Marker({
